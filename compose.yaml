@@ -1,0 +1,8 @@
+services:
+  postgres:
+    image: postgres:17.4-alpine3.21
+    ports:
+      - 5432:5432
+    environment:
+      POSTGRES_PASSWORD: root
+      POSTGRES_USER: root
