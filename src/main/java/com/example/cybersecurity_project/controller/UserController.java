@@ -16,5 +16,17 @@ public class UserController {
     @Autowired
     private JdbcTemplate jdbcTemplate;
 
+    // ❌ Vulnerável a SQL Injection
+    @GetMapping("/search")
+    public List<Map<String, Object>> searchUser(@RequestParam String name) {
+        String sql = "SELECT * FROM user WHERE name = '" + name + "'";
+        return jdbcTemplate.queryForList(sql);
+    }
 
+    // ✅ Segura com PreparedStatement
+    @GetMapping("/safe-search")
+    public List<Map<String, Object>> safeSearchUser(@RequestParam String name) {
+        String sql = "SELECT * FROM user WHERE name = ?";
+        return jdbcTemplate.queryForList(sql, name);
+    }
 }
