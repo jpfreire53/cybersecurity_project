@@ -26,6 +26,20 @@ public class UserController {
         String sql = "SELECT * FROM user WHERE name = '" + name + "'";
         return jdbcTemplate.queryForList(sql);
     }
+
+    // ❌ A07 – Senha salva sem hash
+    @PostMapping("/register")
+    public String register(@RequestBody Map<String, String> body) {
+        String name = body.get("name");
+        String email = body.get("email");
+        String password = body.get("password"); // ❌ senha em texto plano
+
+        // ❌ A02 – Falha Criptográfica
+        String sql = "INSERT INTO users (name, email, password) VALUES (?, ?, ?)";
+        jdbcTemplate.update(sql, name, email, password);
+
+        return "Usuário registrado (inseguro)";
+    }
     
 
     // ✅ Segura com PreparedStatement
